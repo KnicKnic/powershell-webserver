@@ -15,8 +15,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       
-    - name: Build the Docker image
+    - name: Build the Docker image ${{ matrix.os }}
       run: docker build . --file Dockerfile --tag image:ci
+      if: matrix.os == 'ubuntu-latest'
+
+    - name: Build the Docker image ${{ matrix.os }}
+      run: docker build . --file Dockerfile.windows --tag image:ci
+      if: matrix.os == 'windows-latest'
+
       # uses: docker/build-push-action@v1.1.0
       # with:
       #   push: false
