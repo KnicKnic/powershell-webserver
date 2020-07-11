@@ -1,4 +1,5 @@
-FROM mcr.microsoft.com/powershell
+# FROM mcr.microsoft.com/powershell
+FROM knicknic/powershell:small
 
 COPY webserver.ps1 /
 
