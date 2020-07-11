@@ -20,7 +20,7 @@ jobs:
       if: matrix.os == 'ubuntu-latest'
 
     - name: Build the Docker image ${{ matrix.os }}
-      run: docker build . --file Dockerfile.windows --tag image:ci
+      run: systeminfo.exe && docker build . --file Dockerfile.windows --tag image:ci
       if: matrix.os == 'windows-latest'
 
       # uses: docker/build-push-action@v1.1.0
