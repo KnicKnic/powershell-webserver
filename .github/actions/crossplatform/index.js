@@ -8,9 +8,9 @@ async function body() {
     let command =  core.getInput('linux', );
 
     if(os.platform() == 'darwin'){
-        core.getInput('mac')
+        command = core.getInput('mac')
     } else if (os.platform() == 'win32'){
-        core.getInput('windows')
+        command = core.getInput('windows')
     }
 
     const error_code = await exec.exec(command);

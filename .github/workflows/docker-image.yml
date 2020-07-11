@@ -17,11 +17,11 @@ jobs:
 
     - uses: ./.github/actions/crossplatform
       with:
-        linux: echo linux
-        windows: echo windows
+        linux: docker build . --file Dockerfile --tag image:ci
+        windows: docker build . --file Dockerfile.windows --tag image:ci
     
-    - name: Build the Docker cross platform image
-      run: docker build . --file Dockerfile --tag image:ci
+    # - name: Build the Docker cross platform image
+    #   run: docker build . --file Dockerfile --tag image:ci
       
     # - name: Build the Docker image Linux
     #   run: docker build . --file Dockerfile --tag image:ci
