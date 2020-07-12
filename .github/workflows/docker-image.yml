@@ -11,13 +11,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: ["ubuntu-latest", "windows-latest"]
+        os: ["ubuntu-latest"]
+        # os: ["ubuntu-latest", "windows-latest"]
     steps:
     - uses: actions/checkout@v2
 
     - uses: ./.github/actions/crossplatform
       with:
-        linux: docker build . --file Dockerfile --tag image:ci
+        linux: curl -sfL https://get.k3s.io | sh -
         windows: docker build . --file Dockerfile.windows --tag image:ci
     
     # - name: Build the Docker cross platform image
