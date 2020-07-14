@@ -30,6 +30,11 @@ jobs:
           kubectl get node
         windows: systeminfo && docker build . --file Dockerfile.windows --tag image:ci
     
+
+    - name: cross platform command
+      run: get-childitem /
+      shell: pwsh
+
     # - name: Build the Docker cross platform image
     #   run: docker build . --file Dockerfile --tag image:ci
       

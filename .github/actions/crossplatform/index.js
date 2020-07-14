@@ -18,26 +18,47 @@ function uuidv4() {
   
 
 
+String.prototype.format = function () {
+    var a = this;
+    for (var k in arguments) {
+        a = a.replace(new RegExp("\\{" + k + "\\}", 'g'), arguments[k]);
+    }
+    return a
+}
+
+
 async function body() {
     try{
-        let command =  core.getInput('linux');
+        let command =  '';
 
 
         let file = path.join(process.env.GITHUB_WORKSPACE, uuidv4())
 
         // https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#using-a-specific-shell
-        if(os.platform() == 'darwin'){
-            file += ".sh"
-            command = core.getInput('mac')
-            shell = `bash --noprofile --norc -eo pipefail ${file}`
-        } else if (os.platform() == 'win32'){
+        
+        if(core.getInput('common-shell') == "pwsh"){
             file += ".ps1"
-            command = core.getInput('windows')
-            shell = `pwsh -command "& ${file}"`
+            shell = 'pwsh -command "&  \'{0}\'"'.format(file)
         } else{
-            file += ".sh"
-            shell = `bash --noprofile --norc -eo pipefail ${file}`        
+            if(os.platform() == 'darwin'){
+                file += ".sh"
+                shell = 'bash --noprofile --norc -eo pipefail {0}'.format(file)
+            } else if (os.platform() == 'win32'){
+                file += ".ps1"
+                shell = 'pwsh -command "&  \'{0}\'"'.format(file)
+            } else{
+                file += ".sh"
+                shell = 'bash --noprofile --norc -eo pipefail {0}'.format(file)    
+            }
         }
+        if(os.platform() == 'darwin'){
+            command = core.getInput('mac')
+        } else if (os.platform() == 'win32'){
+            command = core.getInput('windows')
+        } else{
+            core.getInput('linux');
+        }
+        
 
         fs.writeFileSync(file, command)
 
