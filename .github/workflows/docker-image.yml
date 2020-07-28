@@ -27,7 +27,7 @@ jobs:
     # - run: kubectl describe pod powershell-web-test
 
     - run: |
-        kubectl wait --timeout=10s --for=condition=Ready pod/powershell-web-test
+        kubectl wait --timeout=11s --for=condition=Ready pod/powershell-web-test
         kubectl logs pod/powershell-web-test
         kubectl get pod -o yaml
         kubectl describe pod powershell-web-test
