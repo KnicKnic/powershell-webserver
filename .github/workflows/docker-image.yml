@@ -26,8 +26,13 @@ jobs:
     
     # - run: kubectl describe pod powershell-web-test
 
-    - run: kubectl wait --timeout=120s --for=condition=Ready pod/powershell-web-test
-    
+    - run: |
+        kubectl wait --timeout=120s --for=condition=Ready pod/powershell-web-test
+        kubectl get pod -o yaml
+        kubectl describe pod powershell-web-test
+        kubectl wait --timeout=10s --for=condition=Ready pod/powershell-web-test
+        
+
     - name: Test web page
       run: | 
         $p = kubectl get pod powershell-web-test -o json | ConvertFrom-Json
