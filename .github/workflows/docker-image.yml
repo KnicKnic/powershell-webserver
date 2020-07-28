@@ -15,8 +15,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
+    # - name: Build the Docker cross platform image
+    #   run: docker build . --file Dockerfile --tag image:ci
+
     - name: Build the Docker cross platform image
-      run: docker build . --file Dockerfile --tag image:ci
+      uses: knicknic/os-specific-run@v1
+      with:
+        linux: docker build . --file Dockerfile --tag image:ci
+        windows: docker build . --file Dockerfile.windows --tag image:ci
 
     - uses: knicknic/temp-kubernetes-ci@master
     
@@ -27,7 +33,7 @@ jobs:
     # - run: kubectl describe pod powershell-web-test
 
     - run: |
-        kubectl wait --timeout=30s --for=condition=Ready pod/powershell-web-test
+        kubectl wait --timeout=120s --for=condition=Ready pod/powershell-web-test
         kubectl logs pod/powershell-web-test
         kubectl get pod -o yaml
         kubectl describe pod powershell-web-test
