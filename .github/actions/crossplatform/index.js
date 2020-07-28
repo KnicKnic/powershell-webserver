@@ -2,9 +2,10 @@ const core = require('@actions/core');
 const exec = require('@actions/exec');
 
 const path = require('path');
+
+// 'aix', 'darwin', 'freebsd', 'linux', 'openbsd', 'sunos', and 'win32'.
 const os = require('os');
 const fs = require('fs');
-// 'aix', 'darwin', 'freebsd', 'linux', 'openbsd', 'sunos', and 'win32'.
 
 
 
@@ -17,7 +18,7 @@ function uuidv4() {
   }
   
 
-
+// add format because that seems to be how github does formatting
 String.prototype.format = function () {
     var a = this;
     for (var k in arguments) {
