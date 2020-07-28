@@ -20,7 +20,8 @@ jobs:
 
     # - uses: knicknic/temp-kubernetes-ci@master
     
-    - run: echo pwd
+    - run: echo `pwd`
+    - run: sleep 5
     - run: kubectl apply -f test/pod.yaml
 
     # - name: test pod comes up
