@@ -37,7 +37,7 @@ jobs:
         foreach($second in 1..120){
           $p = kubectl get pod powershell-web-test -o json | ConvertFrom-Json
           # ensure it goes ready
-          if($p.status.phase -eq "Ready"){
+          if(($p.status.conditions |?{$_.type -eq "Ready"} |%{$_.status} )-contains "True"){
               # show pod status
               kubectl get pod powershell-web-test -o yaml
 
