@@ -20,16 +20,11 @@ jobs:
 
     - uses: knicknic/temp-kubernetes-ci@master
     
-    - run: echo `pwd`
-    - run: sleep 10
-    - run: kubectl get node
     - run: kubectl apply -f test/pod.yaml
 
-    - run: sleep 10
+    # - run: kubectl get pod powershell-web-test -o yaml
     
-    - run: kubectl get pod powershell-web-test -o yaml
-    
-    - run: kubectl describe pod powershell-web-test
+    # - run: kubectl describe pod powershell-web-test
 
     - name: test pod comes up
       run: | 
