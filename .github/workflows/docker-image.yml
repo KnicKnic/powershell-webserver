@@ -26,27 +26,15 @@ jobs:
     
     # - run: kubectl describe pod powershell-web-test
 
-    - name: test pod comes up
+    - run: kubectl wait --timeout=120s --for=condition=Ready pod/powershell-web-test
+    
+    - name: Test web page
       run: | 
-        # test for 120 to see if pod will go ready
-        foreach($second in 1..120){
-          $p = kubectl get pod powershell-web-test -o json | ConvertFrom-Json
-          # ensure it goes ready
-          if(($p.status.conditions |?{$_.type -eq "Ready"} |%{$_.status} )-contains "True"){
-              # show pod status
-              kubectl get pod powershell-web-test -o yaml
-
-              $request = Invoke-WebRequest $p.status.podIP
-              $request 
-              if($request.RawContent.Contains("Hi")){
-                  exit 0
-              }
-              else{
-                  "request is malformed"
-                  exit 1
-              }
-          }
-          sleep 1;
+        $p = kubectl get pod powershell-web-test -o json | ConvertFrom-Json
+        $request = Invoke-WebRequest $p.status.podIP
+        $request 
+        if($request.RawContent.Contains("Hi")){
+            exit 0
         }
         exit 1
       shell: pwsh
