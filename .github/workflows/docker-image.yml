@@ -17,7 +17,38 @@ jobs:
     
     - name: Build the Docker cross platform image
       run: docker build . --file Dockerfile --tag image:ci
-      
+
+    - uses: knicknic/temp-kubernetes-ci
+    
+    - run: echo pwd
+    - run: kubectl apply -f test/pod.yaml
+
+    - name: test pod comes up
+      run: | 
+        # test for 120 to see if pod will go ready
+        foreach($second in 1..120){
+          $p = kubectl get pod powershell-web-test -o json | ConvertFrom-Json
+          # ensure it goes ready
+          if($p.status.phase -eq "Ready"){
+              # show pod status
+              kubectl get pod powershell-web-test -o yaml
+
+              $request = Invoke-WebRequest $p.status.podIP
+              $request 
+              if($request.RawContent.Contains("Hi")){
+                  exit 0
+              }
+              else{
+                  "request is malformed"
+                  exit 1
+              }
+          }
+          sleep 1;
+        }
+        exit 1
+      shell: pwsh
+
+            
     # - name: Build the Docker image Linux
     #   run: docker build . --file Dockerfile --tag image:ci
     #   if: matrix.os == 'ubuntu-latest'
