@@ -15,9 +15,50 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
+    # - name: Build the Docker cross platform image
+    #   run: docker build . --file Dockerfile --tag image:ci
+
     - name: Build the Docker cross platform image
-      run: docker build . --file Dockerfile --tag image:ci
-      
+      uses: knicknic/os-specific-run@v1
+      with:
+        linux: docker build . --file Dockerfile --tag image:ci
+        windows: docker build . --file Dockerfile.windows --tag image:ci
+
+    - uses: knicknic/temp-kubernetes-ci@master
+    
+    - run: kubectl apply -f test/pod.yaml
+
+    # - run: kubectl get pod powershell-web-test -o yaml
+    
+    # - run: kubectl describe pod powershell-web-test
+
+    - run: |
+        kubectl wait --timeout=120s --for=condition=Ready pod/powershell-web-test
+        kubectl logs pod/powershell-web-test
+        kubectl get pod -o yaml
+        kubectl describe pod powershell-web-test
+        kubectl wait --timeout=10s --for=condition=Ready pod/powershell-web-test
+        
+
+    - name: Test web page
+      run: | 
+        $p = kubectl get pod powershell-web-test -o json | ConvertFrom-Json
+        $request = Invoke-WebRequest $p.status.podIP
+        $request 
+        if($request.RawContent.Contains("Hi")){
+            exit 0
+        }
+        exit 1
+      shell: pwsh
+
+            
+    - name: test internet
+      run: |
+       kubectl create job ping --image image:ci -- pwsh --command "Invoke-WebRequest 172.217.14.206 -UseBasicParsing"
+       sleep 30
+       kubectl get job
+       kubectl get pod -o yaml
+
     # - name: Build the Docker image Linux
     #   run: docker build . --file Dockerfile --tag image:ci
     #   if: matrix.os == 'ubuntu-latest'
