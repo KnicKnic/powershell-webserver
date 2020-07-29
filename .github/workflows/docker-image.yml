@@ -54,11 +54,11 @@ jobs:
             
     - name: test internet
       run: |
-       kubectl create job ping --image image:ci -- pwsh --command "invoke-webrequest google.com -usebasicparsing"
+       kubectl create job ping --image image:ci -- pwsh --command " Invoke-WebRequest 172.217.14.206 -UseBasicParsing"
        sleep 30
        kubectl get job
        kubectl get pod -o yaml
-       
+
     # - name: Build the Docker image Linux
     #   run: docker build . --file Dockerfile --tag image:ci
     #   if: matrix.os == 'ubuntu-latest'
