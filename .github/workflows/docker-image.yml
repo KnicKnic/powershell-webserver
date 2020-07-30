@@ -24,13 +24,17 @@ jobs:
         linux: docker build . --file Dockerfile --tag image:ci
         windows: docker build . --file Dockerfile.windows --tag image:ci
 
-    - uses: knicknic/temp-kubernetes-ci@master
+    - uses: sachinmsft/temp-kubernetes-ci@wins
     
     - run: kubectl apply -f test/pod.yaml
 
     # - run: kubectl get pod powershell-web-test -o yaml
     
     # - run: kubectl describe pod powershell-web-test
+
+    - run: kubectl expose pod powershell-web-test --port=8080 --target-port=80 --type=LoadBalancer
+
+    - run: kubectl get pod -A
 
     - run: |
         kubectl wait --timeout=120s --for=condition=Ready pod/powershell-web-test
@@ -58,6 +62,22 @@ jobs:
        sleep 30
        kubectl get job
        kubectl get pod -o yaml
+
+    - run: kubectl get pod -A
+
+    - run: kubectl get service -A -o yaml
+
+    - run: sleep 30
+
+
+    - run: kubectl get pod -A
+
+    - run: kubectl get service -A -o yaml
+
+    - run: kubectl logs ds/svclb-powershell-web-test
+
+    - run: curl http://10.1.0.4:8080
+
 
     # - name: Build the Docker image Linux
     #   run: docker build . --file Dockerfile --tag image:ci

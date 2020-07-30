@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: powershell-web-test
+  labels:
+    app: powershell-web-test
 spec:
   containers:
   - name: powershell-web-test
