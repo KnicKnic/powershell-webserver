@@ -60,6 +60,9 @@ jobs:
        kubectl get job
        kubectl get pod -o yaml
 
+
+    - run: kubectl get service -A -o yaml
+    
     # - name: Build the Docker image Linux
     #   run: docker build . --file Dockerfile --tag image:ci
     #   if: matrix.os == 'ubuntu-latest'
