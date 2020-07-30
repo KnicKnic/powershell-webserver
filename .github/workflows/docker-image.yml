@@ -24,7 +24,7 @@ jobs:
         linux: docker build . --file Dockerfile --tag image:ci
         windows: docker build . --file Dockerfile.windows --tag image:ci
 
-    - uses: knicknic/temp-kubernetes-ci@master
+    - uses: sachinmsft/temp-kubernetes-ci@wins
     
     - run: kubectl apply -f test/pod.yaml
 
@@ -38,7 +38,8 @@ jobs:
         kubectl get pod -o yaml
         kubectl describe pod powershell-web-test
         kubectl wait --timeout=10s --for=condition=Ready pod/powershell-web-test
-        
+    
+    - run: kubectl expose pod powershell-web-test --port=80 --target-port=80 --type=LoadBalancer
 
     - name: Test web page
       run: | 
