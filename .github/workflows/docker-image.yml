@@ -67,6 +67,13 @@ jobs:
     
     - run: kubectl get service -A -o yaml
 
+    - run: sleep 30
+
+    
+    - run: kubectl get pod -A
+    
+    - run: kubectl get service -A -o yaml
+
     - run: curl http://10.1.0.4:80
 
     # - name: Build the Docker image Linux
