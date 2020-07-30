@@ -72,7 +72,7 @@ jobs:
 
     - run: kubectl get pod -A
 
-    - run: kubectl get service -A -o yaml
+    - run: kubectl describe service
 
     - run: kubectl logs ds/svclb-powershell-web-test
 
