@@ -32,7 +32,7 @@ jobs:
     
     # - run: kubectl describe pod powershell-web-test
 
-    - run: kubectl expose pod powershell-web-test --port=8080 --target-port=80 --type=LoadBalancer
+    - run: kubectl expose pod powershell-web-test --port=8085 --target-port=80 --type=LoadBalancer
 
     - run: kubectl get pod -A
 
@@ -76,7 +76,7 @@ jobs:
 
     - run: kubectl logs ds/svclb-powershell-web-test
 
-    - run: curl http://10.1.0.4:8080
+    - run: curl http://10.1.0.4:8085
 
 
     # - name: Build the Docker image Linux
