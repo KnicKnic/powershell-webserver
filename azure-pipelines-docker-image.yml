@@ -1,0 +1,21 @@
+# Build CI for PS docker 
+strategy:
+  matrix:
+    linux:
+      imageName: 'ubuntu-16.04'
+#    mac:
+#      imageName: 'macos-10.14'
+    windows:
+      imageName: 'windows-2019'
+
+pool:
+  vmImage: $(imageName)
+
+trigger:
+- master
+
+steps:
+- task: k3sCI@1
+  displayName: "Run k3s cross-platfrom Docker Image CI"
+  inputs:
+    k3scommands: "echo 'custom command'"
