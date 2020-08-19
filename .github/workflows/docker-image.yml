@@ -32,14 +32,17 @@ jobs:
     
     # - run: kubectl describe pod powershell-web-test
 
+    - run: kubectl expose pod powershell-web-test --port=80 --target-port=80 --type=LoadBalancer
+
+    - run: kubectl get pod -A
+
     - run: |
         kubectl wait --timeout=120s --for=condition=Ready pod/powershell-web-test
         kubectl logs pod/powershell-web-test
         kubectl get pod -o yaml
         kubectl describe pod powershell-web-test
         kubectl wait --timeout=10s --for=condition=Ready pod/powershell-web-test
-        
-
+    
     - name: Test web page
       run: | 
         $p = kubectl get pod powershell-web-test -o json | ConvertFrom-Json
@@ -58,6 +61,20 @@ jobs:
        sleep 30
        kubectl get job
        kubectl get pod -o yaml
+
+
+    - run: kubectl get pod -A
+    
+    - run: kubectl get service -A -o yaml
+
+    - run: sleep 30
+
+    
+    - run: kubectl get pod -A
+    
+    - run: kubectl get service -A -o yaml
+
+    - run: curl http://10.1.0.4:80
 
     # - name: Build the Docker image Linux
     #   run: docker build . --file Dockerfile --tag image:ci
