@@ -1,4 +1,10 @@
-FROM mcr.microsoft.com/powershell:lts-nanoserver-1809
+# specify sha256, this will generate regular dependabot updates
+FROM mcr.microsoft.com/powershell@sha256:3725bc5feed22a1ce405d4eedb9266c33c2452a92bacd647c91781286ea700ec
+
+# use this one for a smaller image
+# FROM mcr.microsoft.com/powershell:lts-nanoserver-1809
+
+# old cross platform SMALL image that is unmaintained
 # FROM mcr.microsoft.com/powershell
 
 COPY webserver.ps1 /
