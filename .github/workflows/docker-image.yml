@@ -54,13 +54,17 @@ jobs:
         exit 1
       shell: pwsh
 
-    # this seems to not work on windows due to the k3s not having outbound internet why? Shrug
+    # this seems to not work on windows due to the k3s not having outbound internet why? - https://github.com/KnicKnic/temp-kubernetes-ci/issues/11
+    # Because of this we are not verifying that the job succeeds
     - name: test internet
       run: |
        kubectl create job ping --image image:ci -- pwsh --command "Invoke-WebRequest 172.217.14.206 -UseBasicParsing"
        sleep 30
        kubectl get job
        kubectl get pod -o yaml
+
+    # validate ping job succeeds
+    # - run: kubectl wait --timeout=10s --for=condition=complete job/ping
 
 
     - run: kubectl get pod -A
