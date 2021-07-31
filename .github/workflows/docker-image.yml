@@ -54,7 +54,7 @@ jobs:
         exit 1
       shell: pwsh
 
-            
+    # this seems to not work on windows due to the k3s not having outbound internet why? Shrug
     - name: test internet
       run: |
        kubectl create job ping --image image:ci -- pwsh --command "Invoke-WebRequest 172.217.14.206 -UseBasicParsing"
@@ -74,7 +74,16 @@ jobs:
     
     - run: kubectl get service -A -o yaml
 
-    - run: curl http://10.1.0.4:80
+    - name: view ipconfig of host
+      uses: knicknic/os-specific-run@v1
+      with:
+        linux: ifconfig
+        windows: ipconfig
+
+    # Commenting this out as it seems the ip of the host changed
+    # I thought it was guaranteed to be 10.1.0.4 in which loopback loadbalancer would map to it
+    # - run: curl http://10.1.0.4:80
+
 
     # - name: Build the Docker image Linux
     #   run: docker build . --file Dockerfile --tag image:ci
