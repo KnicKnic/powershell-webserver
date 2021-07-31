@@ -24,7 +24,7 @@ jobs:
         linux: docker build . --file Dockerfile --tag image:ci
         windows: docker build . --file Dockerfile.windows --tag image:ci
 
-    - uses: knicknic/temp-kubernetes-ci@master
+    - uses: KnicKnic/temp-kubernetes-ci@v1.0.1
     
     - run: kubectl apply -f test/pod.yaml
 
